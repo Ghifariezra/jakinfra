@@ -58,9 +58,8 @@
 			"esbuild",
 			"@biomejs/biome"
 		],
-		"approvedBuilds": [
-			"esbuild",
-			"@biomejs/biome"
+		"ignoredBuiltDependencies": [
+			"msw"
 		]
 	}
 }
