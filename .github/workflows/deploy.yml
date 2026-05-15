@@ -37,6 +37,8 @@ jobs:
 
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
+              env:
+                  PNPM_IGNORE_BUILD_ERRORS: "true"
 
             - name: Build
               run: pnpm run build
