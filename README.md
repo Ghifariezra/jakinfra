@@ -40,3 +40,18 @@ JakInfra adalah platform pemetaan dan analitik untuk memantau infrastruktur dan 
 - **Dashboard Analitik:** Menyajikan insight data melalui DataTable dan KPIs (Analytics route).
 - **Pemrosesan Asinkron (Off-thread):** Web worker untuk render geo tanpa membuat antarmuka menjadi lambat.
 - **Tema Variabel:** Animasi peralihan mode gelap/terang.
+
+## 🗄️ Data
+
+Data bersumber dari data publik [Pemerintah DKI Jakarta](https://satudata.jakarta.go.id/open-data), yang kemudian diolah dan dirapikan oleh [@Ghifariezra](https://github.com/Ghifariezra) agar bisa diakses lewat API yang lebih terstruktur.
+
+Kalau kamu mau pakai datanya, boleh banget — asal tetap cantumkan kredit ya 🙏
+
+## 📄 License
+
+Kode: [MIT](./LICENSE)  
+Data: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+
+---
+
+Built by [@Ghifariezra](https://github.com/Ghifariezra)

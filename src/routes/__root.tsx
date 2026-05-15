@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/contexts/theme-provider";
 import { Footer } from "@/components/shared/footer";
 import { Navbar } from "@/components/shared/navbar";
 import { queryClient } from "@/lib/query-client";
+import { HelmetProvider } from "react-helmet-async";
+
 
 export const Route = createRootRoute({
 	component: RootComponent,
@@ -12,15 +14,17 @@ export const Route = createRootRoute({
 
 function RootComponent() {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<ThemeProvider>
-				<Navbar />
-				<main className="pt-16 min-h-screen">
-					<Outlet />
-				</main>
-				<Footer />
-			</ThemeProvider>
-			{import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
-		</QueryClientProvider>
+		<HelmetProvider>
+			<QueryClientProvider client={queryClient}>
+				<ThemeProvider>
+					<Navbar />
+					<main className="pt-16 min-h-screen">
+						<Outlet />
+					</main>
+					<Footer />
+				</ThemeProvider>
+				{import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
+			</QueryClientProvider>
+		</HelmetProvider>
 	);
 }
