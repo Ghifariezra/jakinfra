@@ -1,0 +1,234 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans: 'Inter Variable', sans-serif;
+    --font-heading: 'Inter Variable', sans-serif;
+    --font-mono: 'Geist Mono', monospace;
+
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --color-teal: #6bd8cb;
+    --color-teal-dim: #29a195;
+    --color-cyan: #5de6ff;
+    --color-surface-dim: #060e20;
+    --color-surface-low: #131b2e;
+    --color-surface-mid: #171f33;
+    --color-surface-high: #222a3d;
+    --color-surface-highest: #2d3449;
+
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-full: 9999px;
+}
+
+/* ─── Light Mode ─────────────────────────────────────── */
+:root {
+	--background: #f0f4f8;
+	--foreground: #0b1326;
+	--card: rgba(255, 255, 255, 0.7);
+	--card-foreground: #0b1326;
+	--popover: rgba(255, 255, 255, 0.85);
+	--popover-foreground: #0b1326;
+	--primary: #29a195;
+	--primary-foreground: #ffffff;
+	--secondary: #e2eaf4;
+	--secondary-foreground: #0b1326;
+	--muted: #e8edf5;
+	--muted-foreground: #5a6a82;
+	--accent: #6bd8cb;
+	--accent-foreground: #003732;
+	--destructive: #e53e3e;
+	--border: rgba(11, 19, 38, 0.12);
+	--input: rgba(11, 19, 38, 0.08);
+	--ring: #6bd8cb;
+	--radius: 1rem;
+
+	--chart-1: #6bd8cb;
+	--chart-2: #5de6ff;
+	--chart-3: #ffb59a;
+	--chart-4: #89f5e7;
+	--chart-5: #a2eeff;
+
+	--sidebar: rgba(255, 255, 255, 0.75);
+	--sidebar-foreground: #0b1326;
+	--sidebar-primary: #29a195;
+	--sidebar-primary-foreground: #ffffff;
+	--sidebar-accent: rgba(107, 216, 203, 0.15);
+	--sidebar-accent-foreground: #003732;
+	--sidebar-border: rgba(11, 19, 38, 0.1);
+	--sidebar-ring: #6bd8cb;
+
+	/* Glass effect variables */
+	--glass-bg: rgba(255, 255, 255, 0.6);
+	--glass-border: rgba(255, 255, 255, 0.8);
+	--glass-blur: 12px;
+	--glass-shadow: 0 4px 24px rgba(11, 19, 38, 0.08);
+	--glow-primary: 0 0 20px rgba(107, 216, 203, 0.25);
+}
+
+/* ─── Dark Mode ──────────────────────────────────────── */
+.dark {
+	--background: #0b1326;
+	--foreground: #dae2fd;
+	--card: rgba(23, 31, 51, 0.7);
+	--card-foreground: #dae2fd;
+	--popover: rgba(23, 31, 51, 0.9);
+	--popover-foreground: #dae2fd;
+	--primary: #6bd8cb;
+	--primary-foreground: #003732;
+	--secondary: #222a3d;
+	--secondary-foreground: #dae2fd;
+	--muted: #1e2740;
+	--muted-foreground: #bcc9c6;
+	--accent: #5de6ff;
+	--accent-foreground: #00363e;
+	--destructive: #ffb4ab;
+	--border: rgba(218, 226, 253, 0.1);
+	--input: rgba(218, 226, 253, 0.08);
+	--ring: #6bd8cb;
+	--radius: 1rem;
+
+	--chart-1: #6bd8cb;
+	--chart-2: #5de6ff;
+	--chart-3: #ffb59a;
+	--chart-4: #89f5e7;
+	--chart-5: #a2eeff;
+
+	--sidebar: rgba(17, 25, 46, 0.8);
+	--sidebar-foreground: #dae2fd;
+	--sidebar-primary: #6bd8cb;
+	--sidebar-primary-foreground: #003732;
+	--sidebar-accent: rgba(107, 216, 203, 0.1);
+	--sidebar-accent-foreground: #6bd8cb;
+	--sidebar-border: rgba(218, 226, 253, 0.08);
+	--sidebar-ring: #6bd8cb;
+
+	/* Glass effect variables */
+	--glass-bg: rgba(23, 31, 51, 0.6);
+	--glass-border: rgba(218, 226, 253, 0.08);
+	--glass-blur: 12px;
+	--glass-shadow: 0 4px 32px rgba(0, 0, 0, 0.4);
+	--glow-primary: 0 0 20px rgba(107, 216, 203, 0.2);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
+
+	/* Untuk browser berbasis WebKit (Chrome, Edge, Safari) */
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	/* Latar belakang track scrollbar */
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	/* Batang scrollbar utama */
+	::-webkit-scrollbar-thumb {
+		background: var(--muted-foreground);
+		border: 2px solid var(--background); /* Memberikan ilusi "mengambang" */
+		border-radius: var(--radius-full);
+		opacity: 0.5;
+	}
+
+	/* Saat batang scrollbar di-hover */
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--primary);
+	}
+
+	/* Untuk Firefox */
+	* {
+		scrollbar-width: thin;
+		scrollbar-color: var(--muted-foreground) transparent;
+	}
+
+	/* Firefox hover state (sedikit hacky, tapi bekerja dengan baik) */
+	*:hover {
+		scrollbar-color: var(--primary) transparent;
+	}
+}
+
+@layer utilities {
+	.glass {
+		background: var(--glass-bg);
+		backdrop-filter: blur(var(--glass-blur));
+		-webkit-backdrop-filter: blur(var(--glass-blur));
+		border: 1px solid var(--glass-border);
+		box-shadow: var(--glass-shadow);
+	}
+	.glass-navbar {
+		background: var(--glass-bg);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		border-bottom: 1px solid var(--glass-border);
+	}
+	.glow-primary {
+		box-shadow: var(--glow-primary);
+	}
+	.gradient-teal {
+		background: linear-gradient(135deg, #6bd8cb, #5de6ff);
+	}
+	.gradient-text-teal {
+		background: linear-gradient(135deg, #6bd8cb, #5de6ff);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+}
+
+/* View Transition untuk AnimatedThemeToggler */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
+}
