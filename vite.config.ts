@@ -49,7 +49,7 @@ export default defineConfig(({ mode }) => {
 		},
 		build: {
 			// Minify pakai esbuild (default, lebih cepat dari terser)
-			minify: "esbuild",
+			minify: "oxc",
 			// Hapus console.log dan debugger di production
 			esbuildOptions: isProd ? { drop: ["console", "debugger"] } : undefined,
 			// Aktifkan CSS code splitting

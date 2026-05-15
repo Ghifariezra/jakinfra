@@ -54,12 +54,10 @@
 	},
 	"pnpm": {
 		"onlyBuiltDependencies": [
-			"msw",
 			"esbuild",
 			"@biomejs/biome"
 		],
 		"approvedBuilds": [
-			"msw",
 			"esbuild",
 			"@biomejs/biome"
 		]
