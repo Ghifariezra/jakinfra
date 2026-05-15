@@ -56,9 +56,7 @@
 	"pnpm": {
 		"onlyBuiltDependencies": [
 			"esbuild",
-			"@biomejs/biome"
-		],
-		"ignoredBuiltDependencies": [
+			"@biomejs/biome",
 			"msw"
 		]
 	}
