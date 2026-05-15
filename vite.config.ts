@@ -23,7 +23,7 @@ export default defineConfig(({ mode }) => {
 			},
 		},
 		server: {
-			port: parseInt(env.VITE_PORT) || 5173,
+			port: parseInt(env.VITE_PORT, 10) || 5173,
 			proxy: {
 				"/api": {
 					target: env.VITE_API_URL || "http://localhost:3000",
@@ -51,9 +51,7 @@ export default defineConfig(({ mode }) => {
 			// Minify pakai esbuild (default, lebih cepat dari terser)
 			minify: "esbuild",
 			// Hapus console.log dan debugger di production
-			esbuildOptions: isProd
-				? { drop: ["console", "debugger"] }
-				: undefined,
+			esbuildOptions: isProd ? { drop: ["console", "debugger"] } : undefined,
 			// Aktifkan CSS code splitting
 			cssCodeSplit: true,
 			// Source map hanya di dev
@@ -71,22 +69,20 @@ export default defineConfig(({ mode }) => {
 								id.includes("maplibre-gl") ||
 								id.includes("react-map-gl") ||
 								id.includes("@turf")
-							) return "vendor-map";
-							if (
-								id.includes("recharts") ||
-								id.includes("d3-")
-							) return "vendor-charts";
-							if (
-								id.includes("react/") ||
-								id.includes("react-dom")
-							) return "vendor-react";
+							)
+								return "vendor-map";
+							if (id.includes("recharts") || id.includes("d3-"))
+								return "vendor-charts";
+							if (id.includes("react/") || id.includes("react-dom"))
+								return "vendor-react";
 							if (id.includes("@tanstack")) return "vendor-query";
 							if (
 								id.includes("radix-ui") ||
 								id.includes("class-variance-authority") ||
 								id.includes("clsx") ||
 								id.includes("tailwind-merge")
-							) return "vendor-ui";
+							)
+								return "vendor-ui";
 						}
 					},
 				},

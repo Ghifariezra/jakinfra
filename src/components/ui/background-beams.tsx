@@ -103,7 +103,7 @@ export const BackgroundBeams = React.memo(
 					{/* Sinar Berjalan (Beams) */}
 					{paths.map((path, index) => (
 						<motion.path
-							key={`path-` + index}
+							key={`path-${index}`}
 							d={path}
 							stroke={`url(#linearGradient-${index})`}
 							strokeOpacity="0.4"
