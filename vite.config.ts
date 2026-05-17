@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
 		resolve: {
 			alias: {
 				"@": path.resolve(__dirname, "./src"),
+				"@docs": path.resolve(__dirname, "./docs"),
 			},
 		},
 		server: {
@@ -38,7 +39,7 @@ export default defineConfig(({ mode }) => {
 		optimizeDeps: {
 			include: [
 				"maplibre-gl",
-				"react-map-gl",
+				// "react-map-gl",
 				"@turf/turf",
 				"axios",
 				"zustand",

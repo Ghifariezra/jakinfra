@@ -3,7 +3,6 @@
 import {
 	AlertTriangle,
 	Building2,
-	Download,
 	Heart,
 	LayoutGrid,
 	Loader2,
@@ -16,11 +15,13 @@ import {
 	Cell,
 	Pie,
 	PieChart,
+	type RenderableText,
 	ResponsiveContainer,
 	XAxis,
 	YAxis,
 } from "recharts";
 import { DataTable } from "@/components/analytics/data-table";
+import { DownloadButton } from "@/components/analytics/download-button";
 import { kepadatanColumns } from "@/components/analytics/kepadatan-columns";
 import { KpiCard } from "@/components/analytics/kpi-card";
 import { SectionCard } from "@/components/analytics/section-card";
@@ -32,10 +33,12 @@ import {
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useDownload } from "@/lib/hooks/use-download";
 import {
 	useStatsBlankSpot,
 	useStatsDensity,
 	useStatsJenis,
+	useStatsKecamatan,
 	useStatsSummary,
 	useStatsWilayah,
 } from "@/lib/hooks/use-stats";
@@ -44,6 +47,10 @@ import {
 
 const barChartConfig = {
 	total: { label: "Fasilitas", color: "#6bd8cb" },
+} satisfies ChartConfig;
+
+const cakupanChartConfig = {
+	persentase: { label: "Cakupan Kelurahan", color: "#ffb59a" },
 } satisfies ChartConfig;
 
 const PIE_COLORS = [
@@ -65,6 +72,8 @@ export function RouteComponent() {
 		order: "desc",
 	});
 	const { data: rawBlankSpots, isLoading: loadingBlank } = useStatsBlankSpot();
+	const { data: rawKecamatan, isLoading: loadingKecamatan } =
+		useStatsKecamatan();
 
 	// Transform bar chart data
 	const distribusiWilayah = useMemo(() => {
@@ -128,8 +137,32 @@ export function RouteComponent() {
 		return Object.values(grouped);
 	}, [rawBlankSpots]);
 
+	// Transform cakupan kecamatan data
+	const cakupanKecamatan = useMemo(() => {
+		if (!rawKecamatan) return [];
+		return [...rawKecamatan]
+			.sort(
+				(a, b) =>
+					Number(a.pct_kelurahan_terlayani) - Number(b.pct_kelurahan_terlayani),
+			)
+			.slice(0, 10)
+			.map((k) => ({
+				nama: k.nama_kecamatan,
+				persentase: Number(k.pct_kelurahan_terlayani),
+				tooltipLabel: `${k.kelurahan_terlayani} dari ${k.total_kelurahan} Kelurahan`,
+			}));
+	}, [rawKecamatan]);
+
 	// Stable empty array for DataTable when loading
 	const densityData = rawDensity ?? [];
+	const { download } = useDownload();
+
+	const kepadatanDownloadColumns = [
+		{ key: "nama_kecamatan" as const, label: "Kecamatan" },
+		{ key: "nama_wilayah" as const, label: "Wilayah" },
+		{ key: "total_fasilitas" as const, label: "Total Faskes" },
+		{ key: "faskes_per_kelurahan" as const, label: "Faskes/Kelurahan" },
+	];
 
 	return (
 		<Head
@@ -183,39 +216,46 @@ export function RouteComponent() {
 
 					{/* Charts Row */}
 					<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-						{/* Bar Chart */}
+						{/* Bar Chart Wilayah */}
 						<SectionCard>
 							<h2 className="text-sm font-semibold text-foreground mb-5">
 								Distribusi per Wilayah
 							</h2>
 							{loadingWilayah ? (
-								<div className="h-56 flex items-center justify-center">
+								// 1. Sesuaikan tinggi loader
+								<div className="h-72 flex items-center justify-center">
 									<Loader2
 										className="animate-spin text-muted-foreground"
 										size={24}
 									/>
 								</div>
 							) : (
-								<ChartContainer config={barChartConfig} className="h-56 w-full">
+								// 2. Ubah tinggi kontainer dari h-56 menjadi h-72
+								<ChartContainer config={barChartConfig} className="h-72 w-full">
 									<ResponsiveContainer width="100%" height="100%">
 										<BarChart
 											data={distribusiWilayah}
 											layout="vertical"
-											margin={{ left: 0, right: 24, top: 0, bottom: 0 }}
-											barSize={10}
+											// 3. Tambahkan margin vertikal (top & bottom: 16) agar baris pertama dan terakhir tidak terpotong
+											margin={{ left: 0, right: 36, top: 16, bottom: 16 }}
+											// 4. Perbesar ukuran bar agar lebih proporsional dengan ruang baru
+											barSize={16}
 										>
 											<XAxis
 												type="number"
 												hide
-												domain={[0, maxBar + maxBar * 0.1]}
+												domain={[0, maxBar + maxBar * 0.15]} // Tambah extra space sedikit untuk label ujung kanan
 											/>
 											<YAxis
 												type="category"
 												dataKey="nama"
-												width={96}
-												tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
+												// 5. Perbesar width YAxis karena nama kota cukup panjang
+												width={140}
+												tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
 												tickLine={false}
 												axisLine={false}
+												// 6. Pastikan semua label di-render
+												interval={0}
 											/>
 											<ChartTooltip
 												content={<ChartTooltipContent />}
@@ -253,7 +293,8 @@ export function RouteComponent() {
 								Sebaran Jenis Sarana
 							</h2>
 							{loadingJenis ? (
-								<div className="h-56 flex items-center justify-center">
+								// 1. Samakan tinggi loader dengan tinggi chart (h-72)
+								<div className="h-72 flex items-center justify-center">
 									<Loader2
 										className="animate-spin text-muted-foreground"
 										size={24}
@@ -261,9 +302,10 @@ export function RouteComponent() {
 								</div>
 							) : (
 								<>
+									{/* 2. Ubah h-56 menjadi h-72 agar sejajar dengan card di sebelahnya */}
 									<ChartContainer
 										config={pieChartConfig}
-										className="h-56 w-full"
+										className="h-72 w-full relative"
 									>
 										<ResponsiveContainer width="100%" height="100%">
 											<PieChart>
@@ -271,8 +313,9 @@ export function RouteComponent() {
 													data={sebaranJenis}
 													cx="40%"
 													cy="50%"
-													innerRadius={64}
-													outerRadius={96}
+													// 3. Perbesar radius lingkaran karena ruang sekarang lebih tinggi
+													innerRadius={76}
+													outerRadius={112}
 													paddingAngle={3}
 													dataKey="value"
 													startAngle={90}
@@ -282,42 +325,134 @@ export function RouteComponent() {
 														<Cell key={`cell-${i}`} fill={entry.fill} />
 													))}
 												</Pie>
-												<ChartTooltip content={<ChartTooltipContent />} />
+												<ChartTooltip
+													cursor={false}
+													content={<ChartTooltipContent indicator="line" />}
+												/>
 											</PieChart>
 										</ResponsiveContainer>
-									</ChartContainer>
-									{/* Legend */}
-									<div className="flex flex-col gap-2 absolute right-8 top-1/2 -translate-y-1/2 max-h-48 overflow-y-auto pr-2">
-										{sebaranJenis.map((item) => (
-											<div key={item.name} className="flex items-center gap-2">
-												<span
-													className="w-2.5 h-2.5 rounded-full shrink-0"
-													style={{ background: item.fill }}
-												/>
-												<span
-													className="text-xs text-muted-foreground max-w-25 truncate"
-													title={item.name}
+
+										{/* Legend */}
+										{/* 4. Perbesar max-h (area scroll) dari max-h-48 ke max-h-60 */}
+										<div className="flex flex-col gap-2.5 absolute right-4 top-1/2 -translate-y-1/2 max-h-60 overflow-y-auto pr-3 custom-scrollbar">
+											{sebaranJenis.map((item) => (
+												<div
+													key={item.name}
+													className="flex items-center gap-2.5"
 												>
-													{item.name}
-												</span>
-											</div>
-										))}
-									</div>
-									{/* Center label */}
-									<div className="absolute left-[40%] top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
-										<p className="text-xl font-semibold text-foreground">
-											{summary?.total_fasilitas
-												? summary.total_fasilitas > 1000
-													? `${(summary.total_fasilitas / 1000).toFixed(1)}K`
-													: summary.total_fasilitas
-												: "0"}
-										</p>
-										<p className="text-xs text-muted-foreground">Total</p>
-									</div>
+													<span
+														className="w-2.5 h-2.5 rounded-full shrink-0"
+														style={{ background: item.fill }}
+													/>
+													<span
+														// 5. Perlebar sedikit batas truncate nama jenis sarana
+														className="text-[11px] text-muted-foreground max-w-30 truncate"
+														title={item.name}
+													>
+														{item.name}
+													</span>
+												</div>
+											))}
+										</div>
+
+										{/* Center label */}
+										<div className="absolute left-[40%] top-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
+											<p className="text-2xl font-semibold text-foreground">
+												{summary?.total_fasilitas
+													? summary.total_fasilitas > 1000
+														? `${(summary.total_fasilitas / 1000).toFixed(1)}K`
+														: summary.total_fasilitas
+													: "0"}
+											</p>
+											<p className="text-[11px] text-muted-foreground mt-0.5">
+												Total
+											</p>
+										</div>
+									</ChartContainer>
 								</>
 							)}
 						</SectionCard>
 					</div>
+
+					{/* Cakupan Kecamatan Chart (Top 10 Terendah) */}
+					<SectionCard>
+						<div className="flex flex-col mb-5">
+							<h2 className="text-sm font-semibold text-foreground">
+								Cakupan Kelurahan Terlayani (Top 10 Terendah)
+							</h2>
+							<p className="text-xs text-muted-foreground mt-1">
+								Persentase kelurahan yang memiliki fasilitas kesehatan pada
+								tingkat kecamatan.
+							</p>
+						</div>
+						{loadingKecamatan ? (
+							// 1. UPDATE: Ubah tinggi loading agar sama dengan chart
+							<div className="h-90 flex items-center justify-center">
+								<Loader2
+									className="animate-spin text-muted-foreground"
+									size={24}
+								/>
+							</div>
+						) : (
+							// 2. UPDATE: Ubah h-64 menjadi h-[360px] atau h-96 agar kontainer lebih tinggi
+							<ChartContainer
+								config={cakupanChartConfig}
+								className="h-90 w-full"
+							>
+								<ResponsiveContainer width="100%" height="100%">
+									<BarChart
+										data={cakupanKecamatan}
+										layout="vertical"
+										// 3. UPDATE: Tambahkan margin top & bottom agar bar atas/bawah tidak mentok
+										margin={{ left: 0, right: 48, top: 10, bottom: 10 }}
+										// 4. UPDATE: Naikkan sedikit ukuran bar agar proporsional dengan tinggi baru
+										barSize={14}
+									>
+										<XAxis
+											type="number"
+											domain={[0, 100]}
+											tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+											axisLine={false}
+											tickLine={false}
+											tickFormatter={(value) => `${value}%`}
+										/>
+										<YAxis
+											type="category"
+											dataKey="nama"
+											width={120}
+											tick={{ fontSize: 10, fill: "var(--muted-foreground)" }}
+											tickLine={false}
+											axisLine={false}
+											interval={0}
+										/>
+										<ChartTooltip
+											cursor={{ fill: "rgba(255,181,154,0.05)" }}
+											content={<ChartTooltipContent indicator="line" />}
+										/>
+										<Bar
+											dataKey="persentase"
+											radius={[0, 4, 4, 0]}
+											fill="var(--color-persentase)"
+											label={{
+												position: "right",
+												fontSize: 11,
+												fill: "var(--muted-foreground)",
+												formatter: (value: RenderableText) =>
+													`${Number(value).toFixed(1)}%`,
+											}}
+										>
+											{cakupanKecamatan.map((_entry, index) => (
+												<Cell
+													key={`cell-${index}`}
+													fill={index < 3 ? "#ff9b7d" : "#ffb59a"}
+												/>
+											))}
+										</Bar>
+									</BarChart>
+								</ResponsiveContainer>
+							</ChartContainer>
+						)}
+					</SectionCard>
 
 					{/* Kepadatan Table — pakai DataTable reusable */}
 					<SectionCard>
@@ -325,16 +460,17 @@ export function RouteComponent() {
 							<h2 className="text-sm font-semibold text-foreground">
 								Kepadatan per Kecamatan (Faskes Tersedia)
 							</h2>
-							<button
-								type="button"
-								className="flex items-center gap-1.5 text-xs text-teal-400 hover:text-teal-300 transition-colors"
-								onClick={() =>
-									alert("Fitur unduh CSV sedang dalam pengembangan.")
+							<DownloadButton
+								onDownload={(format) =>
+									download(format, {
+										data: densityData,
+										filename: "jakinfra-kepadatan-kecamatan",
+										title: "Kepadatan Fasilitas per Kecamatan — JakInfra",
+										columns: kepadatanDownloadColumns,
+									})
 								}
-							>
-								<Download size={13} />
-								Unduh CSV
-							</button>
+								disabled={loadingDensity || densityData.length === 0}
+							/>
 						</div>
 						<DataTable
 							columns={kepadatanColumns}

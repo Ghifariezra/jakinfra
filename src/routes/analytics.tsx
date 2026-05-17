@@ -1,7 +1,7 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { RouteComponent } from '@/lib/features/analytics'
+import { createFileRoute } from "@tanstack/react-router";
+import { RouteComponent } from "@/lib/features/analytics";
 
-export const Route = createFileRoute('/analytics')({
+export const Route = createFileRoute("/analytics")({
 	component: RouteComponent,
 	head: () => ({
 		meta: [
@@ -10,7 +10,8 @@ export const Route = createFileRoute('/analytics')({
 			},
 			{
 				name: "description",
-				content: "Pantau statistik persebaran infrastruktur Jakarta per kecamatan. Visualisasi data komprehensif untuk mendukung pengambilan keputusan berbasis data.",
+				content:
+					"Pantau statistik persebaran infrastruktur Jakarta per kecamatan. Visualisasi data komprehensif untuk mendukung pengambilan keputusan berbasis data.",
 			},
 			{
 				property: "og:title",
@@ -18,7 +19,8 @@ export const Route = createFileRoute('/analytics')({
 			},
 			{
 				property: "og:description",
-				content: "Pantau statistik persebaran infrastruktur Jakarta per kecamatan. Visualisasi data komprehensif untuk mendukung pengambilan keputusan berbasis data.",
+				content:
+					"Pantau statistik persebaran infrastruktur Jakarta per kecamatan. Visualisasi data komprehensif untuk mendukung pengambilan keputusan berbasis data.",
 			},
 			{
 				property: "og:image",
@@ -26,4 +28,4 @@ export const Route = createFileRoute('/analytics')({
 			},
 		],
 	}),
-})
+});

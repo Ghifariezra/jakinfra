@@ -11,12 +11,30 @@
 import { Route as rootRouteImport } from "./routes/__root";
 import { Route as AboutRouteImport } from "./routes/about";
 import { Route as AnalyticsRouteImport } from "./routes/analytics";
+import { Route as ContactRouteImport } from "./routes/contact";
 import { Route as IndexRouteImport } from "./routes/index";
 import { Route as MapRouteImport } from "./routes/map";
+import { Route as PrivacyPolicyRouteImport } from "./routes/privacy-policy";
+import { Route as TermsOfServiceRouteImport } from "./routes/terms-of-service";
 
+const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
+	id: "/terms-of-service",
+	path: "/terms-of-service",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
+	id: "/privacy-policy",
+	path: "/privacy-policy",
+	getParentRoute: () => rootRouteImport,
+} as any);
 const MapRoute = MapRouteImport.update({
 	id: "/map",
 	path: "/map",
+	getParentRoute: () => rootRouteImport,
+} as any);
+const ContactRoute = ContactRouteImport.update({
+	id: "/contact",
+	path: "/contact",
 	getParentRoute: () => rootRouteImport,
 } as any);
 const AnalyticsRoute = AnalyticsRouteImport.update({
@@ -39,43 +57,98 @@ export interface FileRoutesByFullPath {
 	"/": typeof IndexRoute;
 	"/about": typeof AboutRoute;
 	"/analytics": typeof AnalyticsRoute;
+	"/contact": typeof ContactRoute;
 	"/map": typeof MapRoute;
+	"/privacy-policy": typeof PrivacyPolicyRoute;
+	"/terms-of-service": typeof TermsOfServiceRoute;
 }
 export interface FileRoutesByTo {
 	"/": typeof IndexRoute;
 	"/about": typeof AboutRoute;
 	"/analytics": typeof AnalyticsRoute;
+	"/contact": typeof ContactRoute;
 	"/map": typeof MapRoute;
+	"/privacy-policy": typeof PrivacyPolicyRoute;
+	"/terms-of-service": typeof TermsOfServiceRoute;
 }
 export interface FileRoutesById {
 	__root__: typeof rootRouteImport;
 	"/": typeof IndexRoute;
 	"/about": typeof AboutRoute;
 	"/analytics": typeof AnalyticsRoute;
+	"/contact": typeof ContactRoute;
 	"/map": typeof MapRoute;
+	"/privacy-policy": typeof PrivacyPolicyRoute;
+	"/terms-of-service": typeof TermsOfServiceRoute;
 }
 export interface FileRouteTypes {
 	fileRoutesByFullPath: FileRoutesByFullPath;
-	fullPaths: "/" | "/about" | "/analytics" | "/map";
+	fullPaths:
+		| "/"
+		| "/about"
+		| "/analytics"
+		| "/contact"
+		| "/map"
+		| "/privacy-policy"
+		| "/terms-of-service";
 	fileRoutesByTo: FileRoutesByTo;
-	to: "/" | "/about" | "/analytics" | "/map";
-	id: "__root__" | "/" | "/about" | "/analytics" | "/map";
+	to:
+		| "/"
+		| "/about"
+		| "/analytics"
+		| "/contact"
+		| "/map"
+		| "/privacy-policy"
+		| "/terms-of-service";
+	id:
+		| "__root__"
+		| "/"
+		| "/about"
+		| "/analytics"
+		| "/contact"
+		| "/map"
+		| "/privacy-policy"
+		| "/terms-of-service";
 	fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
 	IndexRoute: typeof IndexRoute;
 	AboutRoute: typeof AboutRoute;
 	AnalyticsRoute: typeof AnalyticsRoute;
+	ContactRoute: typeof ContactRoute;
 	MapRoute: typeof MapRoute;
+	PrivacyPolicyRoute: typeof PrivacyPolicyRoute;
+	TermsOfServiceRoute: typeof TermsOfServiceRoute;
 }
 
 declare module "@tanstack/react-router" {
 	interface FileRoutesByPath {
+		"/terms-of-service": {
+			id: "/terms-of-service";
+			path: "/terms-of-service";
+			fullPath: "/terms-of-service";
+			preLoaderRoute: typeof TermsOfServiceRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/privacy-policy": {
+			id: "/privacy-policy";
+			path: "/privacy-policy";
+			fullPath: "/privacy-policy";
+			preLoaderRoute: typeof PrivacyPolicyRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
 		"/map": {
 			id: "/map";
 			path: "/map";
 			fullPath: "/map";
 			preLoaderRoute: typeof MapRouteImport;
+			parentRoute: typeof rootRouteImport;
+		};
+		"/contact": {
+			id: "/contact";
+			path: "/contact";
+			fullPath: "/contact";
+			preLoaderRoute: typeof ContactRouteImport;
 			parentRoute: typeof rootRouteImport;
 		};
 		"/analytics": {
@@ -106,7 +179,10 @@ const rootRouteChildren: RootRouteChildren = {
 	IndexRoute: IndexRoute,
 	AboutRoute: AboutRoute,
 	AnalyticsRoute: AnalyticsRoute,
+	ContactRoute: ContactRoute,
 	MapRoute: MapRoute,
+	PrivacyPolicyRoute: PrivacyPolicyRoute,
+	TermsOfServiceRoute: TermsOfServiceRoute,
 };
 export const routeTree = rootRouteImport
 	._addFileChildren(rootRouteChildren)

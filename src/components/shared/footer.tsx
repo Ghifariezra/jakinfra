@@ -1,12 +1,12 @@
 import { Link } from "@tanstack/react-router";
-import { BrandLogo } from "./brand-logo"; // Import komponen baru
+import { BrandLogo } from "./brand-logo";
 
 export function Footer() {
 	// Array data untuk mengatasi DRY pada tautan footer
 	const footerLinks = [
-		{ name: "Kebijakan Privasi", path: "/" },
-		{ name: "Syarat & Ketentuan", path: "/" },
-		{ name: "Kontak", path: "/" },
+		{ name: "Kebijakan Privasi", path: "/privacy-policy" },
+		{ name: "Syarat & Ketentuan", path: "/terms-of-service" },
+		{ name: "Kontak", path: "/contact" },
 	];
 
 	return (
