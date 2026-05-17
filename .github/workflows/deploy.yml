@@ -41,8 +41,9 @@ jobs:
             - name: Build
               run: pnpm run build
               env:
-                  VITE_API_BASE_URL: ${{ secrets.API_BASE_URL }}
-                  VITE_API_KEY: ${{ secrets.API_KEY }}
+                  VITE_API_URL: ${{ secrets.VITE_API_URL }}
+                  VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
+                  VITE_API_SECURE: ${{ secrets.VITE_API_SECURE }}
 
             - name: Setup Pages
               uses: actions/configure-pages@v4
