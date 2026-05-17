@@ -45,6 +45,9 @@ jobs:
                   VITE_API_KEY: ${{ secrets.VITE_API_KEY }}
                   VITE_API_SECURE: ${{ secrets.VITE_API_SECURE }}
 
+            - name: Create 404.html for SPA Routing
+              run: cp dist/index.html dist/404.html
+
             - name: Setup Pages
               uses: actions/configure-pages@v4
 
